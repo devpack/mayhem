@@ -1,1 +1,1 @@
-http://code.google.com/p/mayhem/source/browse/trunk/mayhem.png
+http://mayhem.googlecode.com/svn/trunk/mayhem.png
