@@ -109,7 +109,7 @@ void rotate_sprite(struct player_view * v)
 	{
 	struct vaisseau_data *ship = v->player->ship;
 
-	clear_bitmap(ship->sprite_buffer_rota);	
+	clear_bitmap(ship->sprite_buffer_rota);
 	rotate_sprite(ship->sprite_buffer_rota, ship->sprite_buffer, 0,0, itofix(ship->angle));
 
 	}
@@ -196,7 +196,7 @@ void plot_tir(struct vaisseau_data *v, struct player_view *views, int nbviews, B
 		 // and we go on!
 		 shoot->free=true;
 		 continue;
-		} 
+		}
 
 	 // display in all views!
 	 int nbsaveviews=nbviews;
@@ -204,7 +204,7 @@ void plot_tir(struct vaisseau_data *v, struct player_view *views, int nbviews, B
 	 while(nbsaveviews--)
 		{
 		put_big_pixel(view->back_map_buffer,
-					view->bordersize+view->w/2+shoot->x-view->player->ship->xpos, 
+					view->bordersize+view->w/2+shoot->x-view->player->ship->xpos,
 					view->bordersize+view->h/2+shoot->y-view->player->ship->ypos, makecol(255,255,255));
 		view++;
 		}
@@ -231,7 +231,7 @@ void plot_tir(struct vaisseau_data *v, struct player_view *views, int nbviews, B
 		 // and we go on!
 		 backshoot->free=true;
 		 continue;
-		} 
+		}
 
 	 // display in all views!
 	 int nbsaveviews=nbviews;
@@ -346,17 +346,17 @@ void mega_collision_test(struct player_info *allpi, struct player_view *views, s
 		if (!allpi[i].ship->explode&&collision_tir_ship(allpi[i].ship,vaisseaux,nombre_vaisseau))
 			{
 			player_exploded(&allpi[i]);
-			textout(screen, font, "SHOT   ", 50*(i+1), 50, makecol(255*(i+1)/(nombre_vaisseau),128,128));
+			//textout(screen, font, "SHOT   ", 50*(i+1), 50, makecol(255*(i+1)/(nombre_vaisseau),128,128));
 			}
        else
 			{
 			if (!allpi[i].ship->explode&& !(vaisseaux[i].landed) && test_collision(&views[i],currentlevel))
 				{
 				player_exploded(&allpi[i]);
-				textout(screen, font, "BOOM  ", 50*(i+1), 50, makecol(255*(i+1)/(nombre_vaisseau),128,128));
+				//textout(screen, font, "BOOM  ", 50*(i+1), 50, makecol(255*(i+1)/(nombre_vaisseau),128,128));
 				}
-			else
-				textout(screen, font, "OK    ", 50*(i+1), 50, makecol(255,255*(i+1)/(nombre_vaisseau),255));
+			//else
+				//textout(screen, font, "OK    ", 50*(i+1), 50, makecol(255,255*(i+1)/(nombre_vaisseau),255));
 			}
 		}
 
@@ -367,7 +367,7 @@ void mega_collision_test(struct player_info *allpi, struct player_view *views, s
 				{
 				player_exploded(&allpi[i]);
 				player_exploded(&allpi[j]);
-				textout(screen, font, "DOUBLEBOOM", 350, 50, makecol(255,255,255));
+				//textout(screen, font, "DOUBLEBOOM", 350, 50, makecol(255,255,255));
 				}
 }
 
