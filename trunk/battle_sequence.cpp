@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "battle_sequence.h"
+#include "platform_data.h"
 
 
 
@@ -21,7 +22,7 @@
 	{ 60, 127, 1045 },
 	{ 66, 145, 1181 },
 	{ 499, 586, 1165 } };
- 
+
   struct platform_data level2[] =
   {
     { 552, 615, 513 },
@@ -32,7 +33,7 @@
 	{ 468, 525, 915 },
 	{ 596, 697, 1141 },
 	{ 21, 92, 1087 } };
- 
+
   struct platform_data level3[] =
   { { 565, 616, 459 },
     { 14, 65, 111 },
@@ -43,7 +44,7 @@
 	{ 492, 548, 987 },
 	{ 66, 145, 1180 },
 	{ 38, 93, 1121 } };
- 
+
 
 
 
@@ -79,9 +80,9 @@ BattleSequence::~BattleSequence()
 
   int i;
   for(i=0;i<nb_views;i++)		// cleanup buffers for each player ship
-	clean_player_view(&views[i]);  
+	clean_player_view(&views[i]);
   for(i=0;i<nb_players;i++)		// cleanup buffers for each player ship
-	clean_vaisseau_data(&vaisseaux[i]);  
+	clean_vaisseau_data(&vaisseaux[i]);
   for(i=0;i<NB_MAX_TYPE_VAISSEAU;i++)	// cleanup the buffers for each ship type
 	cleanup_vaisseau_gfx(&gfx_vaisseaux[i]);
   cleanup_sprite_explosion();
@@ -130,7 +131,7 @@ void BattleSequence::InitAllSpriteGfx()
 	                                            "ship4_thrust_256c.bmp",
 												"ship4_shield_256c.bmp");
   init_sprite_explosion("sprite_explosion.bmp");
-  
+
   for(int i=0;i<nb_players;i++)
     init_vaisseau_data(&vaisseaux[i],&gfx_vaisseaux[i],0.9,0.32,5,1284,1,8,214,2,2);
  //  time active, inactive
@@ -191,7 +192,7 @@ GameSequence* BattleSequence::doRun()
 		load_level(currentlevel);
 		for(i=0;i<nb_players;i++)
 			init_ship_pos_from_platforms(&vaisseaux[i],&(currentlevel->platformdata[i]));
-		
+
 		}
 		else if (key[KEY_2])
 		{
@@ -230,8 +231,8 @@ GameSequence* BattleSequence::doRun()
 		{
 		sprintf(bf,"send miss:%d",miss++);
 		textout(screen,font,bf,700,60,makecol(255,255,255));
-		}	
-	}	
+		}
+	}
   if (gameserver.recv(netpadcmd))
 	{
 	static int count=0;
@@ -241,13 +242,13 @@ GameSequence* BattleSequence::doRun()
 	netpadcmd.controlled_ship=&vaisseaux[0];
 	}
 
-  handle_command(&netpadcmd); 
+  handle_command(&netpadcmd);
 #else
   if(!vaisseaux[0].explode)
-	  handle_command(keyvaisseau[0].cmd); 
+	  handle_command(keyvaisseau[0].cmd);
 #endif
   if(!vaisseaux[1].explode)
-	handle_command(keyvaisseau[1].cmd); 
+	handle_command(keyvaisseau[1].cmd);
 
   calcul_pos(moon_physics,nb_players,vaisseaux,currentlevel->platformdata,currentlevel->nbplatforms);  // Position
   fuel_shield_calcul(nb_players,vaisseaux);
@@ -269,8 +270,11 @@ GameSequence* BattleSequence::doRun()
 
    for(i=0;i<nb_players;i++)
       gestion_tir(&vaisseaux[i], views, nb_views,currentlevel->bitmap);
-   for(i=0;i<nb_players;i++)
-      gestion_dca(&currentlevel->alldca[0], &vaisseaux[i], views, nb_views, currentlevel->bitmap);
+
+    if(USE_DCA!=0) {
+        for(i=0;i<nb_players;i++)
+            gestion_dca(&currentlevel->alldca[0], &vaisseaux[i], views, nb_views, currentlevel->bitmap);
+    }
 
     draw_explosion(players, views, currentlevel->platformdata, nb_players, nb_views);
     draw_debris(players, views, moon_physics, nb_players, nb_views, currentlevel->bitmap);
@@ -294,7 +298,7 @@ GameSequence* BattleSequence::doRun()
 	{
 		char fps[10];
 		sprintf(fps,"fps=%.1f",check_fps*70.0/(retrace_count-retrace_count_init));
-		textout(screen,font,fps,500,50,makecol(255,255,255));
+		textout(screen,font,fps,5,5,makecol(200,200,200));
 		check_fps=0;
 		retrace_count_init=retrace_count;
 	}

@@ -3,6 +3,7 @@
 #include <allegro.h>
 #include "vaisseau_data.h"
 
+#define USE_DCA 0
 #define NB_DCA 2
 #define MAX_DCA_TIR 3
 

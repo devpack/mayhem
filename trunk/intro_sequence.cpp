@@ -2,7 +2,7 @@
 #include "battle_sequence.h"
 
 const int IntroSequence::mini=150;
-const int IntroSequence::maxi=450;
+const int IntroSequence::maxi=400;
 
 IntroSequence::IntroSequence(GameSequence* previous,float zoom, float zoomspeed)
 	: GameSequence(previous)
@@ -96,9 +96,9 @@ GameSequence* IntroSequence::doRun()
 	} while (1);
 	}
 	clear_bitmap(screen);
-	
+
 	GameSequence * seq;
-	if (choice)	
+	if (choice)
 		{
 		iZoom=iZoomMax;
 		seq=new BattleSequence(this,2,2,0);

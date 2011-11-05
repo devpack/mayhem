@@ -25,7 +25,7 @@ void GameManager::Init()
   install_keyboard();                                        // Installe le clavier
   // GP TODO? THROW EXCEPTION?
   install_sound(DIGI_AUTODETECT , MIDI_AUTODETECT , NULL);
-  set_gfx_mode(GFXOPENARG, largeur, hauteur, 0, 0);          // test ecran
+  set_gfx_mode( GFXOPENARG, largeur, hauteur, 0, 0 );          // test ecran
 }
 
 void GameManager::Shutdown()
