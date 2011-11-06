@@ -77,14 +77,21 @@ BattleSequence::~BattleSequence()
   // stop sound
   cleanup_soundfx(&sounds[0]);
   cleanup_soundfx(&sounds[1]);
+  if(nb_views>=3)
+    cleanup_soundfx(&sounds[2]);
+  if(nb_views>=4)
+    cleanup_soundfx(&sounds[3]);
 
   int i;
   for(i=0;i<nb_views;i++)		// cleanup buffers for each player ship
 	clean_player_view(&views[i]);
+
   for(i=0;i<nb_players;i++)		// cleanup buffers for each player ship
 	clean_vaisseau_data(&vaisseaux[i]);
+
   for(i=0;i<NB_MAX_TYPE_VAISSEAU;i++)	// cleanup the buffers for each ship type
 	cleanup_vaisseau_gfx(&gfx_vaisseaux[i]);
+
   cleanup_sprite_explosion();
   unload_option(opt);
   unload_level(currentlevel);
@@ -110,9 +117,20 @@ void BattleSequence::InitMappingAndControls()
   // Here we have to pad the right keys
   init_mapping_key(&keyvaisseau[1],&commands[1],KEY_LEFT,KEY_RIGHT,KEY_DEL_PAD,KEY_0_PAD,KEY_ENTER_PAD);
   init_mapping_key(&keyvaisseau[0],&commands[0],KEY_Z,KEY_X,KEY_V,KEY_C,KEY_G);
+
+  if(nb_views>=3)
+    init_mapping_key(&keyvaisseau[2],&commands[2],KEY_B,KEY_N,KEY_COMMA,KEY_M,KEY_L);
+
+  if(nb_views>=4)
+    init_mapping_key(&keyvaisseau[3],&commands[3],KEY_Y,KEY_U,KEY_O,KEY_I,KEY_0);
+
+
   commands[0].controlled_ship=&vaisseaux[0];
   commands[1].controlled_ship=&vaisseaux[1];
-
+  if(nb_views>=3)
+    commands[2].controlled_ship=&vaisseaux[2];
+  if(nb_views>=4)
+    commands[3].controlled_ship=&vaisseaux[3];
 }
 
 void BattleSequence::InitAllSpriteGfx()
@@ -144,7 +162,7 @@ void BattleSequence::InitPlayerInfo()
   char *defplayername[] = { "Player 1" , "Player 2" , "Player 3" , "Player 4" };
   for(int i=0;i<nb_players;i++)
     {
-    init_player_info(&players[i],defplayername[i],3,&vaisseaux[i]);
+    init_player_info(&players[i],defplayername[i],20,&vaisseaux[i]);
 	init_ship_pos_from_platforms(&vaisseaux[i],&(currentlevel->platformdata[i]));
     }
 }
@@ -161,12 +179,30 @@ void BattleSequence::InitPlayerViews()
   init_player_view(&views[0],90,100,300,260,&players[0]);
   init_player_view(&views[1],410,100,300,260,&players[1]);
   }
+  else if (nb_views == 3)
+  {
+  init_player_view(&views[0],90,40,300,260,&players[0]);
+  init_player_view(&views[1],410,40,300,260,&players[1]);
+  init_player_view(&views[2],40,310,300,260,&players[2]);
+  }
+  else if (nb_views == 4)
+  {
+  init_player_view(&views[0],90,40,300,260,&players[0]);
+  init_player_view(&views[1],410,40,300,260,&players[1]);
+  init_player_view(&views[2],40,310,300,260,&players[2]);
+  init_player_view(&views[3],460,310,300,260,&players[3]);
+  }
 }
 
 void BattleSequence::InitSoundFx()
 {
 init_soundfx_from_wavfile(&sounds[0],"sfx_loop_thrust.WAV","sfx_loop_shield.WAV","sfx_loop_refuel.WAV","sfx_shoot.WAV","sfx_boom.WAV","sfx_rebound.WAV");
 init_soundfx_from_wavfile(&sounds[1],"sfx_loop_thrust.WAV","sfx_loop_shield.WAV","sfx_loop_refuel.WAV","sfx_shoot.WAV","sfx_boom.WAV","sfx_rebound.WAV");
+if (nb_views >= 3)
+    init_soundfx_from_wavfile(&sounds[2],"sfx_loop_thrust.WAV","sfx_loop_shield.WAV","sfx_loop_refuel.WAV","sfx_shoot.WAV","sfx_boom.WAV","sfx_rebound.WAV");
+if (nb_views >= 4)
+    init_soundfx_from_wavfile(&sounds[3],"sfx_loop_thrust.WAV","sfx_loop_shield.WAV","sfx_loop_refuel.WAV","sfx_shoot.WAV","sfx_boom.WAV","sfx_rebound.WAV");
+
 create_sprite_buffer_screen();
 }
 
@@ -216,7 +252,7 @@ GameSequence* BattleSequence::doRun()
          break;
         }
 
-  get_input_clavier(2,keyvaisseau);   // Clavier (only one... the other comes from .net)
+  get_input_clavier(nb_views,keyvaisseau);   // Clavier (only one... the other comes from .net)
 
 #ifdef __NETSUPPORT__
   struct command  *cmdptr=keyvaisseau[0].cmd;
@@ -250,11 +286,23 @@ GameSequence* BattleSequence::doRun()
   if(!vaisseaux[1].explode)
 	handle_command(keyvaisseau[1].cmd);
 
+  if(nb_views>=3)
+    if(!vaisseaux[2].explode)
+        handle_command(keyvaisseau[2].cmd);
+
+  if(nb_views>=4)
+    if(!vaisseaux[3].explode)
+        handle_command(keyvaisseau[3].cmd);
+
   calcul_pos(moon_physics,nb_players,vaisseaux,currentlevel->platformdata,currentlevel->nbplatforms);  // Position
   fuel_shield_calcul(nb_players,vaisseaux);
   // sound both player
   play_soundfx_from_shipdata(&sounds[0],&vaisseaux[0]);
   play_soundfx_from_shipdata(&sounds[1],&vaisseaux[1]);
+  if(nb_views>=3)
+    play_soundfx_from_shipdata(&sounds[2],&vaisseaux[2]);
+  if(nb_views>=4)
+    play_soundfx_from_shipdata(&sounds[3],&vaisseaux[3]);
 
 
    draw_basic_player_view(views, nb_views, currentlevel->bitmap, currentlevel->colormap);
