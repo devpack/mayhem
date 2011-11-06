@@ -78,19 +78,35 @@ GameSequence* IntroSequence::doRun()
 		if(tempo++ == 50)
 			{
 			tempo=0;
-			if(currentcolor==red)
-				currentcolor=black;
-			else
+			//if(currentcolor==red)
+				//currentcolor=black;
+			//else
 				currentcolor=red;
 			}
 		if (key[KEY_ESC])
 			break;
 		if (key[KEY_ENTER])
 			{
-			choice=1;
+			choice=2;
 			break;
 			}
-		textout_centre(screen, font, "[ Press ENTER to play or ESC to leave ]", GameManager::largeur/2, maxi+5, currentcolor);
+		if (key[KEY_F2])
+			{
+			choice=2;
+			break;
+			}
+		if (key[KEY_F3])
+			{
+			choice=3;
+			break;
+			}
+		if (key[KEY_F4])
+			{
+			choice=4;
+			break;
+			}
+
+		textout_centre(screen, font, "[ Press ENTER to play or (F2/F3/F4 for 2/3/4 players) or ESC to leave ]", GameManager::largeur/2, maxi+5, currentcolor);
 
 		vsync();
 	} while (1);
@@ -101,7 +117,7 @@ GameSequence* IntroSequence::doRun()
 	if (choice)
 		{
 		iZoom=iZoomMax;
-		seq=new BattleSequence(this,2,2,0);
+		seq=new BattleSequence(this,choice,choice,0);
 		}
 	else
 		seq=ReturnScreen();
