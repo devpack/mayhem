@@ -3,6 +3,9 @@
 
 #include <allegro.h>
 
+#define  DEFAULT_WIDTH  1024
+#define  DEFAULT_HEIGHT 768
+
 class GameSequence
 {
 public:
@@ -26,17 +29,13 @@ public:
    static void Init();
    static void Shutdown();
    static void Run(GameSequence *aSeq);
-public:
-   static const int largeur; 
-   static const int hauteur;  // Taille fenetre video affichable
-
 };
 
 
 class InterruptTimer
 {
 public:
-	static void init() { reset(); install_timer(); install_int(&InterruptTimer::irq, 25); };	// install interrupt timer 1/40s (25 ms) 
+	static void init() { reset(); install_timer(); install_int(&InterruptTimer::irq, 25); };	// install interrupt timer 1/40s (25 ms)
     static void shutdown() { remove_timer(); };
 	static volatile int timing_counter;
 	inline static void start() { timing_counter = 0; };

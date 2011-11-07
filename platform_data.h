@@ -38,6 +38,6 @@ struct level_data
 
 void init_level_dca(struct dca_data *dca, int xsrc, int ysrc, int area, int delay);
 void init_level_data(struct level_data* leveldat, char * bmpname, char *mini_bmpname, struct platform_data *platformdata,int nbplatforms);
-int load_level(struct level_data* leveldat);
+int load_level(struct level_data* leveldat, int largeur, int hauteur);
 void unload_level(struct level_data* leveldat);
 #endif

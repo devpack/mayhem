@@ -12,15 +12,11 @@
                                 //------------------//
 
   struct platform_data level1[] =
-  { { 504, 568, 985 },
-    { 464, 513, 333 },
+  { { 504, 568, 985 }, { 464, 513, 333 },	{ 428, 497, 531 },	{ 178, 241, 875 },
     { 8, 37, 187 },
 	{ 302, 351, 271 },
-	{ 428, 497, 531 },
-	{ 178, 241, 875 },
 	{ 434, 521, 835 },
 	{ 60, 127, 1045 },
-	{ 66, 145, 1181 },
 	{ 499, 586, 1165 } };
 
   struct platform_data level2[] =
@@ -51,12 +47,15 @@
 
 
 // init currentlevel with level
-BattleSequence::BattleSequence(GameSequence *previous,int nbviews, int nbplayers, int level)
+BattleSequence::BattleSequence(GameSequence *previous,int nbviews, int nbplayers, int level, int s_width, int s_height)
   : GameSequence(previous),moon_physics(0.07,0.984,0.99,0.6,0.6,0.6,0.6,0.2)
 #ifdef __NET_SUPPORT__
      , gameclient(3000,"localhost"), gameserver(3000)
 #endif
 {
+  screen_width = s_width;
+  screen_height = s_height;
+
   nb_views = nbviews;
   nb_players = nbplayers;
   currentlevel=&levels[level];
@@ -68,7 +67,7 @@ BattleSequence::BattleSequence(GameSequence *previous,int nbviews, int nbplayers
   InitPlayerInfo();
   InitPlayerViews();
   // TODO ASSERT?
-  load_level(currentlevel);
+  load_level(currentlevel, screen_width, screen_height);
 }
 
 BattleSequence::~BattleSequence()
@@ -170,27 +169,28 @@ void BattleSequence::InitPlayerInfo()
 
 void BattleSequence::InitPlayerViews()
 {
+
   if (nb_views == 1)
   {
   init_player_view(&views[0],90,100,300,260,&players[0]);
   }
   else if (nb_views == 2)
   {
-  init_player_view(&views[0],90,100,300,260,&players[0]);
-  init_player_view(&views[1],410,100,300,260,&players[1]);
+  init_player_view(&views[0], screen_width*(90.0/800.0) , screen_height*(100.0/600.0), screen_width*(300.0/800.0), screen_height*(260.0/600.0),&players[0]);
+  init_player_view(&views[1], screen_width*(410.0/800.0) , screen_height*(100.0/600.0) ,screen_width*(300.0/800.0), screen_height*(260.0/600.0),&players[1]);
   }
   else if (nb_views == 3)
   {
-  init_player_view(&views[0],90,40,300,260,&players[0]);
-  init_player_view(&views[1],410,40,300,260,&players[1]);
-  init_player_view(&views[2],40,310,300,260,&players[2]);
+  init_player_view(&views[0], screen_width*(90/800.0), screen_height*(40/600.0),screen_width*(300.0/800.0),screen_height*(260.0/600.0),&players[0]);
+  init_player_view(&views[1], screen_width*(410/800.0) ,screen_height*(40/600.0),screen_width*(300.0/800.0),screen_height*(260.0/600.0),&players[1]);
+  init_player_view(&views[2], screen_width*(40/800.0) , screen_height*(310/600.0),screen_width*(300.0/800.0),screen_height*(260.0/600.0),&players[2]);
   }
   else if (nb_views == 4)
   {
-  init_player_view(&views[0],90,40,300,260,&players[0]);
-  init_player_view(&views[1],410,40,300,260,&players[1]);
-  init_player_view(&views[2],40,310,300,260,&players[2]);
-  init_player_view(&views[3],460,310,300,260,&players[3]);
+  init_player_view(&views[0], screen_width*(90/800.0), screen_height*(40/600.0),screen_width*(300.0/800.0),screen_height*(260.0/600.0),&players[0]);
+  init_player_view(&views[1], screen_width*(410/800.0) ,screen_height*(40/600.0),screen_width*(300.0/800.0),screen_height*(260.0/600.0),&players[1]);
+  init_player_view(&views[2], screen_width*(40/800.0), screen_height*(310/600.0),screen_width*(300.0/800.0),screen_height*(260.0/600.0),&players[2]);
+  init_player_view(&views[3], screen_width*(460/800.0), screen_height*(310/600.0),screen_width*(300.0/800.0),screen_height*(260.0/600.0),&players[3]);
   }
 }
 
@@ -225,7 +225,7 @@ GameSequence* BattleSequence::doRun()
 		{
 		unload_level(currentlevel);
 		currentlevel=&levels[0];
-		load_level(currentlevel);
+		load_level(currentlevel, screen_width, screen_height);
 		for(i=0;i<nb_players;i++)
 			init_ship_pos_from_platforms(&vaisseaux[i],&(currentlevel->platformdata[i]));
 
@@ -234,7 +234,7 @@ GameSequence* BattleSequence::doRun()
 		{
 		unload_level(currentlevel);
 		currentlevel=&levels[1];
-		load_level(currentlevel);
+		load_level(currentlevel, screen_width, screen_height);
 		for(i=0;i<nb_players;i++)
 			init_ship_pos_from_platforms(&vaisseaux[i],&(currentlevel->platformdata[i]));
 		}
@@ -242,7 +242,7 @@ GameSequence* BattleSequence::doRun()
 		{
 		unload_level(currentlevel);
 		currentlevel=&levels[2];
-		load_level(currentlevel);
+		load_level(currentlevel, screen_width, screen_height);
 		for(i=0;i<nb_players;i++)
 			init_ship_pos_from_platforms(&vaisseaux[i],&(currentlevel->platformdata[i]));
 		}
@@ -326,7 +326,7 @@ GameSequence* BattleSequence::doRun()
 
     draw_explosion(players, views, currentlevel->platformdata, nb_players, nb_views);
     draw_debris(players, views, moon_physics, nb_players, nb_views, currentlevel->bitmap);
-    gestion_minimap(vaisseaux, currentlevel, nb_players);
+    gestion_minimap(vaisseaux, currentlevel, nb_players, screen_width, screen_height);
 
     if(currentlevel==&levels[0])
        warp_zone(vaisseaux, nb_players);
@@ -347,6 +347,11 @@ GameSequence* BattleSequence::doRun()
 		char fps[10];
 		sprintf(fps,"fps=%.1f",check_fps*70.0/(retrace_count-retrace_count_init));
 		textout(screen,font,fps,5,5,makecol(200,200,200));
+
+		char reso[10];
+		sprintf(reso, "%ix%i", screen_width, screen_height);
+        textout(screen,font, reso ,5,17,makecol(200,200,200));
+
 		check_fps=0;
 		retrace_count_init=retrace_count;
 	}

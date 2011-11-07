@@ -32,11 +32,11 @@ void init_level_data(struct level_data* leveldat, char * bmpname,char *mini_bmpn
 	leveldat->platformdata=platformdata;
 }
 
-int load_level(struct level_data * leveldat)
+int load_level(struct level_data * leveldat, int largeur, int hauteur)
 {
  leveldat->bitmap=load_bitmap(leveldat->bmpname,leveldat->colormap);
  leveldat->mini_bitmap=load_bitmap(leveldat->mini_bmpname,leveldat->mini_colormap);
- leveldat->mini_bitmap_buffer=create_bitmap(99,150);
+ leveldat->mini_bitmap_buffer=create_bitmap(largeur*(99/800.0), hauteur*(150/600.0));
 
 	if (leveldat->bitmap && leveldat->mini_bitmap)
 	{

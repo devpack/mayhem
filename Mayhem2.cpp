@@ -42,6 +42,7 @@ int main()
  GameManager::Init();
  // previous seq, nb views, nb players, start level
  GameSequence * seq=new IntroSequence(NULL,10.0,0.5);
+
  GameManager::Run(seq);
  GameManager::Shutdown();
  return 0;

@@ -3,6 +3,9 @@
 
 #include "game_mgr.h"
 
+#define INTRO_SCREEN_WIDTH 1024
+#define INTRO_SCREEN_HEIGHT 768
+
 class IntroSequence : public GameSequence
 {
 public:
@@ -18,6 +21,9 @@ private:
    BITMAP* iLogo;
    PALETTE iLogoPalette;
    BITMAP* iDoublebuffer;
+
+   int width;
+   int height;
 };
 
 #endif

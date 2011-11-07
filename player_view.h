@@ -33,7 +33,7 @@ void test_collision_debris(struct vaisseau_data *v, BITMAP *src_map);
 void plot_debris(struct vaisseau_data *v, struct player_view *views,const physics_constants& physics,int nbviews);
 void draw_debris(struct player_info *allpi, struct player_view *views,const physics_constants& physics, int nbviews, int nombre_vaisseau, BITMAP *src_map);
 
-void gestion_minimap(struct vaisseau_data *vaisseaux, struct level_data *currentlevel, int nbplayers);
+void gestion_minimap(struct vaisseau_data *vaisseaux, struct level_data *currentlevel, int nbplayers, int largeur, int hauteur);
 
 int test_place_dca_tir(struct dca_data *dca);
 void gestion_dca(struct dca_data *dca, struct vaisseau_data *v,  struct player_view *views, int nbviews, BITMAP *src_map);
