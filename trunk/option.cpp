@@ -162,7 +162,7 @@ int init_option_data(struct option_data *opt, char *option_sprite_name, int acti
    opt->option_sprite = load_bitmap(option_sprite_name,opt->option_sprite_colors);
    if(opt->option_sprite) return(0);
    else return(-1);
-  
+
 }
 
 void unload_option(struct option_data *opt)

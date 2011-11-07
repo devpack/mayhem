@@ -35,7 +35,7 @@
 class BattleSequence : public GameSequence
 {
 public:
-       BattleSequence(GameSequence *previous,int nbviews, int nbplayers, int level);
+       BattleSequence(GameSequence *previous,int nbviews, int nbplayers, int level, int s_width, int s_height);
        ~BattleSequence();
 private:
        void InitLevelData();
@@ -52,6 +52,9 @@ private:
         netgameclient gameclient;
         netgameserver gameserver;
 #endif
+        int screen_width;
+        int screen_height;
+
         int    nb_views;
         int    nb_players;
         struct vaisseau_data vaisseaux[NB_MAX_VAISSEAU];

@@ -484,21 +484,24 @@ void draw_debris(struct player_info *allpi, struct player_view *views,const phys
 //----------------------------------------------------------------------------//
 
 
-void gestion_minimap(struct vaisseau_data *vaisseaux, struct level_data *currentlevel, int nbplayers)
+void gestion_minimap(struct vaisseau_data *vaisseaux, struct level_data *currentlevel, int nbplayers, int largeur, int hauteur)
 {
-    blit(currentlevel->mini_bitmap, currentlevel->mini_bitmap_buffer, 0, 0, 0, 0, 99, 150);
+    //blit(currentlevel->mini_bitmap, currentlevel->mini_bitmap_buffer, 0, 0, 0, 0, 99, 150);
+    stretch_blit(currentlevel->mini_bitmap, currentlevel->mini_bitmap_buffer, 0, 0, 99, 150, 0, 0, largeur*(99/800.0), hauteur*(150/600.0));
 
     int x,y;
     struct vaisseau_data *v;
     for(int i=0; i<nbplayers; i++)
     {
-    v=&vaisseaux[i];
-    x=(v->xpos>>3)+1;
-    y=(v->ypos>>3)+3;
-    put_big_pixel(currentlevel->mini_bitmap_buffer, x, y, makecol(255, 255, 255));
+        v=&vaisseaux[i];
+        x=(v->xpos>>3)+1;
+        y=(v->ypos>>3)+3;
+        put_big_pixel(currentlevel->mini_bitmap_buffer, x*(largeur*(99/800.0)/99.0), y*(hauteur*(150/600.0)/150.0), makecol(255, 255, 255));
     }
 
-    blit(currentlevel->mini_bitmap_buffer, screen, 0, 0, 350, 370, 99, 150);
+    blit(currentlevel->mini_bitmap_buffer, screen, 0, 0, largeur*(350.0/800.0), hauteur*(370.0/600.0), largeur*(99/800.0), hauteur*(150/600.0));
+    //stretch_blit(currentlevel->mini_bitmap_buffer, screen, 0, 0, 99, 150,largeur*(350.0/800.0), hauteur*(370.0/600.0), largeur*(99/800.0), hauteur*(150/600.0));
+
     clear_bitmap(currentlevel->mini_bitmap_buffer);
 }
 
@@ -625,12 +628,19 @@ void warp_zone(struct vaisseau_data *v, int nbplayers)
 {
     while(nbplayers--)
     {
-    if(v->ypos<=150 && v->xpos>=176 && v->xpos<=182)
+    if(v->ypos<=160 && v->xpos>=174 && v->xpos<=184)
        {
        v->xpos=344;
-       v->ypos=1054;
+       v->ypos=1052;
        v->xposprecise=itofix(344);
-       v->yposprecise=itofix(1054);
+       v->yposprecise=itofix(1052);
+       }
+    if(1053<=v->ypos && v->xpos>=339 && v->xpos<=349)
+       {
+       v->xpos=179;
+       v->ypos=165;
+       v->xposprecise=itofix(179);
+       v->yposprecise=itofix(165);
        }
     v++;
     }

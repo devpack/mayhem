@@ -10,7 +10,10 @@ IntroSequence::IntroSequence(GameSequence* previous,float zoom, float zoomspeed)
 	iLogo=load_bitmap("intro_logo.bmp",iLogoPalette);
 	iZoomMax=iZoom=ftofix(zoom);
 	iZoomSpeed=ftofix(zoomspeed);
-	iDoublebuffer=create_bitmap(GameManager::largeur,maxi-mini);
+	iDoublebuffer=create_bitmap(INTRO_SCREEN_WIDTH,maxi-mini);
+
+	width = DEFAULT_WIDTH;
+	height = DEFAULT_HEIGHT;
 }
 
 
@@ -30,6 +33,7 @@ GameSequence* IntroSequence::doRun()
 	set_palette(iLogoPalette);
 	clear_bitmap(screen);
 	InterruptTimer::start();
+
 	do
 	{
 		while(InterruptTimer::wasTriggered()) {
@@ -42,10 +46,10 @@ GameSequence* IntroSequence::doRun()
 		clear_bitmap(iDoublebuffer);
 		DrawZoomedLogoInCenter(mini,maxi);
 		// draw 2 horizontal lines
-		hline(iDoublebuffer, 0,0,GameManager::largeur,makecol(255,255,255));
-		hline(iDoublebuffer, 0,IntroSequence::maxi-IntroSequence::mini-1,GameManager::largeur,makecol(255,255,255));
+		hline(iDoublebuffer, 0,0,INTRO_SCREEN_WIDTH,makecol(255,255,255));
+		hline(iDoublebuffer, 0,IntroSequence::maxi-IntroSequence::mini-1,INTRO_SCREEN_WIDTH,makecol(255,255,255));
 		// blit to the screen
-		blit(iDoublebuffer,screen,0,0,0,mini,GameManager::largeur,maxi-mini);
+		blit(iDoublebuffer,screen,0,0,0,mini,INTRO_SCREEN_WIDTH,maxi-mini);
 		if (tempo>25)
 			{
 			tempo=0;
@@ -66,6 +70,7 @@ GameSequence* IntroSequence::doRun()
 
 
 	int choice=0;
+
 	if (!quickExit)
 	{
 	tempo=0;
@@ -105,8 +110,26 @@ GameSequence* IntroSequence::doRun()
 			choice=4;
 			break;
 			}
+		if (key[KEY_MINUS_PAD] || key[KEY_MINUS_PAD])
+			{
+            width = 800;
+            height = 600;
+            set_gfx_mode( GFX_AUTODETECT, width, height, 0, 0 );
+            }
+		if (key[KEY_PLUS_PAD] || key[KEY_PLUS_PAD])
+			{
+            width = 1280;
+            height = 800;
+            set_gfx_mode( GFX_AUTODETECT, width, height, 0, 0 );
+            }
+		if (key[KEY_ASTERISK])
+			{
+            width = 1024;
+            height = 768;
+            set_gfx_mode( GFX_AUTODETECT, width, height, 0, 0 );
+            }
 
-		textout_centre(screen, font, "[ Press ENTER to play or (F2/F3/F4 for 2/3/4 players) or ESC to leave ]", GameManager::largeur/2, maxi+5, currentcolor);
+		textout_centre(screen, font, "[ Press ENTER to play or (F2/F3/F4 for 2/3/4 players) or ESC to leave ]", INTRO_SCREEN_WIDTH/2, maxi+5, currentcolor);
 
 		vsync();
 	} while (1);
@@ -117,7 +140,7 @@ GameSequence* IntroSequence::doRun()
 	if (choice)
 		{
 		iZoom=iZoomMax;
-		seq=new BattleSequence(this,choice,choice,0);
+		seq=new BattleSequence(this,choice,choice,0, width, height);
 		}
 	else
 		seq=ReturnScreen();
@@ -129,7 +152,7 @@ void IntroSequence::DrawZoomedLogoInCenter(int y1,int y2)
 {
 	int width=fixtoi(fixmul(itofix(iLogo->w),iZoom));
 	int height=fixtoi(fixmul(itofix(iLogo->h),iZoom));
-	int targetwidth=GameManager::largeur;
+	int targetwidth=INTRO_SCREEN_WIDTH;
 	int targetheight=y2-y1;
 
 	int xs,ys,ws,hs;
@@ -165,4 +188,5 @@ void IntroSequence::DrawZoomedLogoInCenter(int y1,int y2)
 		hd=height;
 		}
 	stretch_blit(iLogo,iDoublebuffer,xs,ys,ws,hs,xd,yd,wd,hd);
+	//void stretch_blit(BITMAP *source, BITMAP *dest, int source_x, source_y, source_width, source_height, int dest_x, dest_y, dest_width, dest_height);
 }
