@@ -15,7 +15,7 @@ bool collision_testonepixel_separate(int x1,int y1, BITMAP * bmp1, int x2, int y
     if ( (commonpalette[pixelcolor].r !=0) ||
 		 (commonpalette[pixelcolor].g !=0) ||
 		 (commonpalette[pixelcolor].b !=0))
-		{	
+		{
 		bmp_select(bmp1);
 		address_bmp = bmp_read_line(bmp1, y1);      // address ligne y du fond
 		pixelcolor = bmp_read8(address_bmp+x1);      // lit l'octet x dans ligne y
@@ -118,7 +118,7 @@ bool pixel_collision_detect_inbox(BITMAP *bmp1,int xl1, int yt1,BITMAP *bmp2,int
 // Implementation de la detection des collisions entre vaisseaux
 //Å@First we look for a bounding box, if none, sure, there are no collision
 //  If there is, we find the limit of the bounding box and
-//  we pixel iterate through it... 
+//  we pixel iterate through it...
 //
 
 bool test_collision_ship2ship(struct vaisseau_data * vaisseau1,struct vaisseau_data *vaisseau2,PALETTEPTR commonpalette)
