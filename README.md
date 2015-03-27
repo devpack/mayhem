@@ -18,8 +18,4 @@ NB: The executable can be downloaded from: https://raw.githubusercontent.com/dev
 
 PC version screenshot: 
 
-Description: 
-
-Periodic distribution of co-regulated genes evolution: 
-
 ![alt tag](https://raw.githubusercontent.com/devpack/mayhem/master/wiki/mayhem.jpg)
