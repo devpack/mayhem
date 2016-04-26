@@ -28,7 +28,7 @@
 #define NB_MAX_VAISSEAU 4
 #define NB_MAX_PLAYERS (NB_MAX_VAISSEAU)
 #define NB_MAX_TYPE_VAISSEAU 4
-#define NB_LEVELS 3
+#define NB_LEVELS 4
 
 #define NB_OPTIONS 1
 

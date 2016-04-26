@@ -1,3 +1,11 @@
+Update: 
+
+I [Martin O'Hanlon](https://github.com/martinohanlon) picked up this port of Mayhem created by [devpack](https://github.com/devpack/mayhem), ported it to the Raspberry Pi [github.com/martinohanlon/mayhem-pi](https://github.com/martinohanlon/mayhem-pi) and added some new features.  
+
+I intended to keep this fork up to date with any new changes made to the Raspberry Pi version as a mechanism of showing the lineage from the original fork and its useful for testing to have a windows compiled version.
+
+Original Readme:
+
 I did (with my friend) this PC version of the game almost 10 years ago (2002), but it's apparently still working good on new PC (tested Windows 7 and Windows XP). We were very carefull to have the same "physic laws" so ship behavior/control is exactly the same as original (all gfx/sounds are the original ones). See original game (by Espen Skoglund): http://hol.abime.net/3853.
 
 The goal of this project is to provide code base to people who would like to improve the game or just start another port of it. The code is using the Allegro graphic library (http://alleg.sourceforge.net/).

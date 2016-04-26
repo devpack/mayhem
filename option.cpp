@@ -100,14 +100,14 @@ void attrib_option(struct option_data *opt, struct vaisseau_data *allv, int test
    v->max_shield_force = v->max_shield_force/2;
    }
 
-
    opt->active=false;
    opt->time_out=0;
    opt->time_in=0;
 
-   }
    if(v->option_type == 4 && !(v->landed||v->rebound))             // 4 = ship rotate
    v->angle = v->angle + 1;
+
+   }
 
 }
 

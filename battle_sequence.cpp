@@ -12,7 +12,10 @@
                                 //------------------//
 
   struct platform_data level1[] =
-  { { 504, 568, 985 }, { 464, 513, 333 },	{ 428, 497, 531 },	{ 178, 241, 875 },
+  { { 504, 568, 985 }, 
+    { 464, 513, 333 },	
+    { 428, 497, 531 },	
+    { 178, 241, 875 },
     { 8, 37, 187 },
 	{ 302, 351, 271 },
 	{ 434, 521, 835 },
@@ -41,10 +44,16 @@
 	{ 66, 145, 1180 },
 	{ 38, 93, 1121 } };
 
-
-
-
-
+  struct platform_data level4[] =
+  { { 565, 616, 459 },
+    { 14, 65, 111 },
+	{ 343, 398, 207 },
+	{ 713, 760, 231 },
+	{ 473, 540, 617 },
+	{ 316, 385, 805 },
+	{ 492, 548, 987 },
+	{ 66, 145, 1180 },
+	{ 38, 93, 1121 } };
 
 // init currentlevel with level
 BattleSequence::BattleSequence(GameSequence *previous,int nbviews, int nbplayers, int level, int s_width, int s_height)
@@ -108,6 +117,9 @@ void BattleSequence::InitLevelData()
   init_level_data(&levels[2],"Mayhem_Level3_Map_256c.bmp", "Mini_map3.bmp", level3,9);
   init_level_dca(&(&levels[2])->alldca[0], 180, 555, 90, 25);
   init_level_dca(&(&levels[2])->alldca[1], 152, 1012, 90, 25);
+  init_level_data(&levels[3],"Mayhem_Level4_Map_256c.bmp", "Mini_map4.bmp", level3,9);
+  init_level_dca(&(&levels[3])->alldca[0], 180, 555, 90, 25);
+  init_level_dca(&(&levels[3])->alldca[1], 152, 1012, 90, 25);
 }
 
 void BattleSequence::InitMappingAndControls()
@@ -136,8 +148,8 @@ void BattleSequence::InitAllSpriteGfx()
 {
   // init the gfx for the first vaisseau type
   init_vaisseau_gfx_from_file(&gfx_vaisseaux[0],"ship1_256c.bmp",
-	                                           "ship1_thrust_256c.bmp",
-												 "ship1_shield_256c.bmp");
+	                                            "ship1_thrust_256c.bmp",
+										     	"ship1_shield_256c.bmp");
   init_vaisseau_gfx_from_file(&gfx_vaisseaux[1],"ship2_256c.bmp",
 	                                            "ship2_thrust_256c.bmp",
 												"ship2_shield_256c.bmp");
@@ -147,11 +159,11 @@ void BattleSequence::InitAllSpriteGfx()
   init_vaisseau_gfx_from_file(&gfx_vaisseaux[3],"ship4_256c.bmp",
 	                                            "ship4_thrust_256c.bmp",
 												"ship4_shield_256c.bmp");
-  init_sprite_explosion("sprite_explosion.bmp");
+  init_sprite_explosion("Sprite_explosion.bmp");
 
   for(int i=0;i<nb_players;i++)
     init_vaisseau_data(&vaisseaux[i],&gfx_vaisseaux[i],0.9,0.32,5,1284,1,8,214,2,2);
- //  time active, inactive
+  // time active, inactive
   init_option_data(opt, "Option.bmp", 500, 50);
 }
 
@@ -219,145 +231,120 @@ GameSequence* BattleSequence::doRun()
   InterruptTimer::start();
   while(isRunning)
   {
-  while(InterruptTimer::wasTriggered()) {
-	  // quick hack for level change
-		if (key[KEY_1])
-		{
-		unload_level(currentlevel);
-		currentlevel=&levels[0];
-		load_level(currentlevel, screen_width, screen_height);
-		for(i=0;i<nb_players;i++)
-			init_ship_pos_from_platforms(&vaisseaux[i],&(currentlevel->platformdata[i]));
-
-		}
-		else if (key[KEY_2])
-		{
-		unload_level(currentlevel);
-		currentlevel=&levels[1];
-		load_level(currentlevel, screen_width, screen_height);
-		for(i=0;i<nb_players;i++)
-			init_ship_pos_from_platforms(&vaisseaux[i],&(currentlevel->platformdata[i]));
-		}
-		else if (key[KEY_3])
-		{
-		unload_level(currentlevel);
-		currentlevel=&levels[2];
-		load_level(currentlevel, screen_width, screen_height);
-		for(i=0;i<nb_players;i++)
-			init_ship_pos_from_platforms(&vaisseaux[i],&(currentlevel->platformdata[i]));
-		}
-        else if(key[KEY_ESC])
+    while(InterruptTimer::wasTriggered()) {
+        if(key[KEY_ESC])
         {
-         isRunning=false;
-         break;
+            isRunning=false;
+            break;
         }
 
-  get_input_clavier(nb_views,keyvaisseau);   // Clavier (only one... the other comes from .net)
+        get_input_clavier(nb_views,keyvaisseau);   // Clavier (only one... the other comes from .net)
 
-#ifdef __NETSUPPORT__
-  struct command  *cmdptr=keyvaisseau[0].cmd;
-  if (memcmp(&netpadcmd,cmdptr,sizeof(struct command)))
-	{
-	static int count=0;
-	static int miss=0;
-	char bf[20];
-	sprintf(bf,"net send:%d",count++);
-	textout(screen,font,bf,700,50,makecol(255,255,255));
-	if (!gameclient.send(keyvaisseau[0].cmd))
-		{
-		sprintf(bf,"send miss:%d",miss++);
-		textout(screen,font,bf,700,60,makecol(255,255,255));
-		}
-	}
-  if (gameserver.recv(netpadcmd))
-	{
-	static int count=0;
-	char bf[20];
-	sprintf(bf,"net recv:%d",count++);
-	textout(screen,font,bf,700,80,makecol(255,255,255));
-	netpadcmd.controlled_ship=&vaisseaux[0];
-	}
+        #ifdef __NETSUPPORT__
+        struct command  *cmdptr=keyvaisseau[0].cmd;
+        if (memcmp(&netpadcmd,cmdptr,sizeof(struct command)))
+            {
+            static int count=0;
+            static int miss=0;
+            char bf[20];
+            sprintf(bf,"net send:%d",count++);
+            textout(screen,font,bf,700,50,makecol(255,255,255));
+            if (!gameclient.send(keyvaisseau[0].cmd))
+                {
+                sprintf(bf,"send miss:%d",miss++);
+                textout(screen,font,bf,700,60,makecol(255,255,255));
+                }
+            }
+        if (gameserver.recv(netpadcmd))
+            {
+            static int count=0;
+            char bf[20];
+            sprintf(bf,"net recv:%d",count++);
+            textout(screen,font,bf,700,80,makecol(255,255,255));
+            netpadcmd.controlled_ship=&vaisseaux[0];
+            }
 
-  handle_command(&netpadcmd);
-#else
-  if(!vaisseaux[0].explode)
-	  handle_command(keyvaisseau[0].cmd);
-#endif
-  if(!vaisseaux[1].explode)
-	handle_command(keyvaisseau[1].cmd);
+        handle_command(&netpadcmd);
+        #else
+        if(!vaisseaux[0].explode)
+            handle_command(keyvaisseau[0].cmd);
+        #endif
+        if(!vaisseaux[1].explode)
+            handle_command(keyvaisseau[1].cmd);
 
-  if(nb_views>=3)
-    if(!vaisseaux[2].explode)
-        handle_command(keyvaisseau[2].cmd);
+        if(nb_views>=3)
+            if(!vaisseaux[2].explode)
+                handle_command(keyvaisseau[2].cmd);
 
-  if(nb_views>=4)
-    if(!vaisseaux[3].explode)
-        handle_command(keyvaisseau[3].cmd);
+        if(nb_views>=4)
+            if(!vaisseaux[3].explode)
+                handle_command(keyvaisseau[3].cmd);
 
-  calcul_pos(moon_physics,nb_players,vaisseaux,currentlevel->platformdata,currentlevel->nbplatforms);  // Position
-  fuel_shield_calcul(nb_players,vaisseaux);
-  // sound both player
-  play_soundfx_from_shipdata(&sounds[0],&vaisseaux[0]);
-  play_soundfx_from_shipdata(&sounds[1],&vaisseaux[1]);
-  if(nb_views>=3)
-    play_soundfx_from_shipdata(&sounds[2],&vaisseaux[2]);
-  if(nb_views>=4)
-    play_soundfx_from_shipdata(&sounds[3],&vaisseaux[3]);
-
-
-   draw_basic_player_view(views, nb_views, currentlevel->bitmap, currentlevel->colormap);
-
-   // first we rotate the sprite then display the shooting
-   for(i=0;i<nb_players;i++)
-		rotate_sprite(&views[i]);
-
-  mega_collision_test(players, views, vaisseaux, currentlevel, nb_views, nb_players);
-
-  gestion_option(opt, currentlevel,vaisseaux, views, nb_players,nb_views);
+        calcul_pos(moon_physics,nb_players,vaisseaux,currentlevel->platformdata,currentlevel->nbplatforms);  // Position
+        fuel_shield_calcul(nb_players,vaisseaux);
+        // sound both player
+        play_soundfx_from_shipdata(&sounds[0],&vaisseaux[0]);
+        play_soundfx_from_shipdata(&sounds[1],&vaisseaux[1]);
+        if(nb_views>=3)
+            play_soundfx_from_shipdata(&sounds[2],&vaisseaux[2]);
+        if(nb_views>=4)
+            play_soundfx_from_shipdata(&sounds[3],&vaisseaux[3]);
 
 
-   for(i=0;i<nb_players;i++)
-      gestion_tir(&vaisseaux[i], views, nb_views,currentlevel->bitmap);
+        draw_basic_player_view(views, nb_views, currentlevel->bitmap, currentlevel->colormap);
 
-    if(USE_DCA!=0) {
+        // first we rotate the sprite then display the shooting
         for(i=0;i<nb_players;i++)
-            gestion_dca(&currentlevel->alldca[0], &vaisseaux[i], views, nb_views, currentlevel->bitmap);
-    }
+                rotate_sprite(&views[i]);
 
-    draw_explosion(players, views, currentlevel->platformdata, nb_players, nb_views);
-    draw_debris(players, views, moon_physics, nb_players, nb_views, currentlevel->bitmap);
-    gestion_minimap(vaisseaux, currentlevel, nb_players, screen_width, screen_height);
+        mega_collision_test(players, views, vaisseaux, currentlevel, nb_views, nb_players);
 
-    if(currentlevel==&levels[0])
-       warp_zone(vaisseaux, nb_players);
+        gestion_option(opt, currentlevel,vaisseaux, views, nb_players,nb_views);
 
-	for(i=0;i<nb_players;i++)
-		display_rotate_sprite_in_all_view(&views[i],views,nb_views);
-   // back_map_buffer dans screen
-	for(i=0;i<nb_views;i++)
-		{
-		struct player_view* v = &views[i];
-		blit(v->back_map_buffer, screen, 0, 0, v->x, v->y, v->w+2*v->bordersize, v->h+2*v->bordersize);
-		}
 
-#ifdef CHECKFPS
-    check_fps++;
-	if (check_fps == 100)
-	{
-		char fps[10];
-		sprintf(fps,"fps=%.1f",check_fps*70.0/(retrace_count-retrace_count_init));
-		textout(screen,font,fps,5,5,makecol(200,200,200));
+        for(i=0;i<nb_players;i++)
+            gestion_tir(&vaisseaux[i], views, nb_views,currentlevel->bitmap);
 
-		char reso[10];
-		sprintf(reso, "%ix%i", screen_width, screen_height);
-        textout(screen,font, reso ,5,17,makecol(200,200,200));
+            if(USE_DCA!=0) {
+                for(i=0;i<nb_players;i++)
+                    gestion_dca(&currentlevel->alldca[0], &vaisseaux[i], views, nb_views, currentlevel->bitmap);
+            }
 
-		check_fps=0;
-		retrace_count_init=retrace_count;
-	}
-#endif
-  vsync();                                                   // wait the raster
-  } // eof while(InterruptTimer())
+        draw_explosion(players, views, currentlevel->platformdata, nb_players, nb_views);
+        draw_debris(players, views, moon_physics, nb_players, nb_views, currentlevel->bitmap);
+        gestion_minimap(vaisseaux, currentlevel, nb_players, screen_width, screen_height);
+
+        if(currentlevel==&levels[0])
+        warp_zone(vaisseaux, nb_players);
+
+        for(i=0;i<nb_players;i++)
+            display_rotate_sprite_in_all_view(&views[i],views,nb_views);
+            
+        // back_map_buffer dans screen
+        for(i=0;i<nb_views;i++)
+            {
+            struct player_view* v = &views[i];
+            blit(v->back_map_buffer, screen, 0, 0, v->x, v->y, v->w+2*v->bordersize, v->h+2*v->bordersize);
+            }
+
+    #ifdef CHECKFPS
+        check_fps++;
+        if (check_fps == 100)
+        {
+            char fps[10];
+            sprintf(fps,"fps=%.1f",check_fps*70.0/(retrace_count-retrace_count_init));
+            textout(screen,font,fps,5,5,makecol(200,200,200));
+
+            char reso[10];
+            sprintf(reso, "%ix%i", screen_width, screen_height);
+            textout(screen,font, reso ,5,17,makecol(200,200,200));
+
+            check_fps=0;
+            retrace_count_init=retrace_count;
+         }
+    #endif
+        vsync();                                                   // wait the raster
+    } // eof while(InterruptTimer())
   } // eof while (isRunning)
   InterruptTimer::reset();
 
