@@ -379,5 +379,6 @@ bool BattleSequence::Gameover()
     {
         if (player_gameover(&players[i])) gameovers++;
     }
-    return(((gameovers + 1) == nb_players) ? true : false);
+    //are all but one players 
+    return(((gameovers + 1) >= nb_players) ? true : false);
 }
