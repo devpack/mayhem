@@ -11,9 +11,15 @@ void init_player_info(struct player_info* player, char *name,int nblives, struct
 
 void player_exploded(struct player_info* player)
 {
-	player->nblives--;
+	//player lives are now reduced when the explosion finishes to deal with gameover 
+    //player->nblives--;
 	player->ship->explode=true;
     player->ship->thrust=itofix(0);
     player->ship->shield=false;
     player->ship->fire=false;
+}
+
+bool player_gameover(struct player_info* player)
+{
+    return((player->nblives < 0) ? true : false);
 }

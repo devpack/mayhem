@@ -56,7 +56,7 @@
 	{ 38, 93, 1121 } };
 
 // init currentlevel with level
-BattleSequence::BattleSequence(GameSequence *previous,int nbviews, int nbplayers, int level, int s_width, int s_height)
+BattleSequence::BattleSequence(GameSequence *previous,int nbviews, int nbplayers, int nblives, int level, int s_width, int s_height)
   : GameSequence(previous),moon_physics(0.07,0.984,0.99,0.6,0.6,0.6,0.6,0.2)
 #ifdef __NET_SUPPORT__
      , gameclient(3000,"localhost"), gameserver(3000)
@@ -67,6 +67,7 @@ BattleSequence::BattleSequence(GameSequence *previous,int nbviews, int nbplayers
 
   nb_views = nbviews;
   nb_players = nbplayers;
+  nb_lives = nblives;
   currentlevel=&levels[level];
   //
   InitLevelData();
@@ -173,7 +174,7 @@ void BattleSequence::InitPlayerInfo()
   char *defplayername[] = { "Player 1" , "Player 2" , "Player 3" , "Player 4" };
   for(int i=0;i<nb_players;i++)
     {
-    init_player_info(&players[i],defplayername[i],20,&vaisseaux[i]);
+    init_player_info(&players[i],defplayername[i],nb_lives,&vaisseaux[i]);
 	init_ship_pos_from_platforms(&vaisseaux[i],&(currentlevel->platformdata[i]));
     }
 }
@@ -232,12 +233,12 @@ GameSequence* BattleSequence::doRun()
   while(isRunning)
   {
     while(InterruptTimer::wasTriggered()) {
-        if(key[KEY_ESC])
+        if(key[KEY_ESC] || Gameover())
         {
             isRunning=false;
             break;
         }
-
+        
         get_input_clavier(nb_views,keyvaisseau);   // Clavier (only one... the other comes from .net)
 
         #ifdef __NETSUPPORT__
@@ -266,20 +267,20 @@ GameSequence* BattleSequence::doRun()
 
         handle_command(&netpadcmd);
         #else
-        if(!vaisseaux[0].explode)
+        if(!player_gameover(&players[0]))
             handle_command(keyvaisseau[0].cmd);
         #endif
-        if(!vaisseaux[1].explode)
+        if(!player_gameover(&players[1]))
             handle_command(keyvaisseau[1].cmd);
 
         if(nb_views>=3)
-            if(!vaisseaux[2].explode)
+            if(!player_gameover(&players[2]))
                 handle_command(keyvaisseau[2].cmd);
 
         if(nb_views>=4)
-            if(!vaisseaux[3].explode)
+            if(!player_gameover(&players[3]))
                 handle_command(keyvaisseau[3].cmd);
-
+                
         calcul_pos(moon_physics,nb_players,vaisseaux,currentlevel->platformdata,currentlevel->nbplatforms);  // Position
         fuel_shield_calcul(nb_players,vaisseaux);
         // sound both player
@@ -343,10 +344,40 @@ GameSequence* BattleSequence::doRun()
             retrace_count_init=retrace_count;
          }
     #endif
+        
         vsync();                                                   // wait the raster
     } // eof while(InterruptTimer())
   } // eof while (isRunning)
+  
+  if (Gameover())
+  {
+      char gameovermsg[10];
+      //who won?
+      int winner = 0;
+      int winnerlives = 0;
+      for(i=0;i<nb_players;i++)
+        if(players[i].nblives > winnerlives)
+        {
+            winnerlives = players[i].nblives;
+            winner = i + 1;
+        }
+      if(winner == 0) sprintf(gameovermsg, "Game over. Draw!");
+      else sprintf(gameovermsg, "Game over. Player %i wins!", winner);
+      textout(screen,font, gameovermsg ,5,29,makecol(255,0,0));
+      rest(2000);
+  }
   InterruptTimer::reset();
 
   return  ReturnScreen();
+}
+
+bool BattleSequence::Gameover()
+{
+    int gameovers = 0;
+    //count how many players are game over
+    for(int i=0;i<nb_players;i++)
+    {
+        if (player_gameover(&players[i])) gameovers++;
+    }
+    return(((gameovers + 1) == nb_players) ? true : false);
 }

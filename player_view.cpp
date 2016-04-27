@@ -53,7 +53,11 @@ void draw_basic_player_view(struct player_view *v,int nbviews, BITMAP *src_map,P
     char buffervx[20];
     char buffervy[20];
 
-	sprintf(buffer,"Live(s): %d",v->player->nblives);
+    if (player_gameover(v->player))
+        sprintf(buffer,"Game over");
+    else 
+        sprintf(buffer,"Live(s): %d",v->player->nblives);
+    
 	sprintf(bufferx,"x=%d",ship->xpos);
 	sprintf(buffery,"y=%d",ship->ypos);
 	sprintf(buffervx,"vx=%d",fixtoi(ship->vx));
@@ -319,6 +323,7 @@ void draw_explosion(struct player_info *allpi, struct player_view *views, struct
 				   allpi[i].ship->explode_count=0;
 				   allpi[i].ship->explode=false;
 				   init_ship_pos_from_platforms(allpi[i].ship,&plats[i]);
+                   allpi[i].nblives--;
                    }
 				}
 		}

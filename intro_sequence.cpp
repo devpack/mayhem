@@ -152,7 +152,7 @@ GameSequence* IntroSequence::doRun()
 	if (choice)
 		{
 		iZoom=iZoomMax;
-		seq=new BattleSequence(this,choice,choice,levelchoice, width, height);
+		seq=new BattleSequence(this,choice,choice,20,levelchoice, width, height);
 		}
 	else
 		seq=ReturnScreen();
