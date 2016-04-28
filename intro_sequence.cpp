@@ -31,9 +31,16 @@ GameSequence* IntroSequence::doRun()
 	bool quickExit=false;
 	int tempo=0;
 	bool canQuickExit=false;
+    
+    int menuitems = 4;
+    int menuselected = 0;
+    char menutext[50];
+    
     int levelchoice=0;
-    char strlevelchoice[50];
-
+    int liveschoice = 10;
+    bool dcachoice = false;
+    bool wallchoice = true;
+    
 	set_palette(iLogoPalette);
 	clear_bitmap(screen);
 	InterruptTimer::start();
@@ -79,6 +86,7 @@ GameSequence* IntroSequence::doRun()
         tempo=0;
         int black=makecol(0,0,0);
         int red=makecol(255,0,0);
+        int lightred=makecol(255, 50, 50);
         int currentcolor=red;
         do
         {
@@ -138,10 +146,72 @@ GameSequence* IntroSequence::doRun()
                 height = 768;
                 set_gfx_mode( GFX_AUTODETECT, width, height, 0, 0 );
                 }
+                
+            //menu control
+            if (key[KEY_DOWN] || key[KEY_X])
+            {
+                if (menuselected < menuitems - 1) menuselected++;
+                rest(100);
+            }
+            if (key[KEY_UP] || key[KEY_Z])
+            {
+                if (menuselected > 0) menuselected--;
+                rest(100);  
+            }
+            if (key[KEY_LEFT] || key[KEY_C])
+            {
+                switch(menuselected) 
+                {
+                    case 0:
+                        if(levelchoice > 0) levelchoice--;
+                        break;
+                    case 1:
+                        if(liveschoice > 0) liveschoice--;
+                        break;
+                    case 2:
+                        dcachoice = !dcachoice;
+                        break;
+                    case 3:
+                        wallchoice = !wallchoice;
+                        break;
+                }
+                rest(100);
+            }
+            if (key[KEY_RIGHT] || key[KEY_V])
+            {
+                switch(menuselected) 
+                {
+                    case 0:
+                        if(levelchoice < NB_LEVELS - 1) levelchoice++;
+                        break;
+                    case 1:
+                        liveschoice++;
+                        break;
+                    case 2:
+                        dcachoice = !dcachoice;
+                        break;
+                    case 3:
+                        wallchoice = !wallchoice;
+                        break;
+                }
+                rest(100);  
+            }
 
-            textout_centre(screen, font, "[ Press ENTER to play or (F2/F3/F4 for 2/3/4 players) or ESC to leave ]", INTRO_SCREEN_WIDTH/2, maxi+5, currentcolor);
-            snprintf(strlevelchoice, sizeof(strlevelchoice), "[ Press F5 to change level ] - %d", levelchoice + 1);
-            textout_centre(screen, font, strlevelchoice, INTRO_SCREEN_WIDTH/2, maxi+15, currentcolor);
+            textout_centre(screen, font, "Press ENTER to play or (F2/F3/F4 for 2/3/4 players) or ESC to leave", INTRO_SCREEN_WIDTH/2, maxi+5, currentcolor);
+            
+            textout(screen, font, "Menu - Use arrow keys to change options:", INTRO_SCREEN_WIDTH/3, maxi+15, currentcolor);
+            
+            snprintf(menutext, sizeof(menutext), "   Level - %d   ", levelchoice + 1);
+            textout(screen, font, menutext, INTRO_SCREEN_WIDTH/3, maxi+25, ((menuselected == 0) ? lightred : red));
+            
+            snprintf(menutext, sizeof(menutext), "   Lives - %d   ", liveschoice);
+            textout(screen, font, menutext, INTRO_SCREEN_WIDTH/3, maxi+35, ((menuselected == 1) ? lightred : red));
+            
+            snprintf(menutext, sizeof(menutext), "   Use DCA - %s   ", ((dcachoice) ? "yes" : "no" ));
+            textout(screen, font, menutext, INTRO_SCREEN_WIDTH/3, maxi+45, ((menuselected == 2) ? lightred : red));
+            
+            snprintf(menutext, sizeof(menutext), "   Wall Collision - %s   ", ((wallchoice) ? "yes" : "no" ));
+            textout(screen, font, menutext, INTRO_SCREEN_WIDTH/3, maxi+55, ((menuselected == 3) ? lightred : red));
             
             vsync();
         } while (1);
@@ -152,7 +222,7 @@ GameSequence* IntroSequence::doRun()
 	if (choice)
 		{
 		iZoom=iZoomMax;
-		seq=new BattleSequence(this,choice,choice,20,levelchoice, width, height);
+		seq=new BattleSequence(this, choice, choice, liveschoice, levelchoice, dcachoice, wallchoice, width, height);
 		}
 	else
 		seq=ReturnScreen();

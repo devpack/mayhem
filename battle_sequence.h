@@ -35,7 +35,7 @@
 class BattleSequence : public GameSequence
 {
 public:
-       BattleSequence(GameSequence *previous,int nbviews, int nbplayers, int nblives, int level, int s_width, int s_height);
+       BattleSequence(GameSequence *previous,int nbviews, int nbplayers, int nblives, int level, bool usedca, bool wall_collision, int s_width, int s_height);
        ~BattleSequence();
 private:
        void InitLevelData();
@@ -59,6 +59,8 @@ private:
         int    nb_views;
         int    nb_players;
         int    nb_lives;
+        bool use_dca;
+        bool wall_collision;
         struct vaisseau_data vaisseaux[NB_MAX_VAISSEAU];
         struct mapping_key keyvaisseau[NB_MAX_VAISSEAU];
         struct command commands[NB_MAX_VAISSEAU];

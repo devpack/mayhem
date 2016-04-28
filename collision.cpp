@@ -62,7 +62,7 @@ bool test_collision(struct player_view * pv, struct level_data *currentlevel)
     if (!test_it) return test_it;
 
 	BITMAP * little_screen = sprite_buffer_screen();
-    // 32*32 de back_map_buffer2 ou sera blittÈ le sprite -> little_screen
+    // 32*32 de back_map_buffer2 ou sera blittÔøΩ le sprite -> little_screen
     blit(pv->back_map_buffer, little_screen, pv->bordersize+pv->w/2, pv->bordersize+pv->h/2, 0, 0, 32, 32);
 
     int y;                                                   // loop pour toute les lignes
@@ -78,22 +78,42 @@ bool test_collision(struct player_view * pv, struct level_data *currentlevel)
 	for(x=xorig;x<xorig+size;x++)
 		{
 		if (collision_testonepixel(x,yorig,vaisseau->sprite_buffer_rota,little_screen,vaisseau->gfx->sprite_colors))
-			return TRUE;
+			if (currentlevel->wall_collision) return TRUE;
+            else
+            {
+                bounce_vaisseau(vaisseau);
+                return FALSE;
+            }
 		}
 	for(y=yorig;y<yorig+size;y++)
 		{
 		if (collision_testonepixel(xorig+size,y,vaisseau->sprite_buffer_rota,little_screen,vaisseau->gfx->sprite_colors))
-			return TRUE;
+			if (currentlevel->wall_collision) return TRUE;
+            else
+            {
+                bounce_vaisseau(vaisseau);
+                return FALSE;
+            }
 		}
 	for(x=xorig+size;x>=xorig+1;x--)
 		{
 		if (collision_testonepixel(x,yorig+size,vaisseau->sprite_buffer_rota,little_screen,vaisseau->gfx->sprite_colors))
-			return TRUE;
+			if (currentlevel->wall_collision) return TRUE;
+            else
+            {
+                bounce_vaisseau(vaisseau);
+                return FALSE;
+            }
 		}
 	for(y=yorig+size;y>=yorig+1;y--)
 		{
 		if (collision_testonepixel(xorig,y,vaisseau->sprite_buffer_rota,little_screen,vaisseau->gfx->sprite_colors))
-			return TRUE;
+			if (currentlevel->wall_collision) return TRUE;
+            else
+            {
+                bounce_vaisseau(vaisseau);
+                return FALSE;
+            }
 		}
 	xorig+=1;
 	yorig+=1;
@@ -102,6 +122,14 @@ bool test_collision(struct player_view * pv, struct level_data *currentlevel)
 
 	return FALSE;
 
+}
+
+void bounce_vaisseau(struct vaisseau_data *vaisseau) 
+{
+    vaisseau->ax = itofix(0);
+    vaisseau->ay = itofix(0);
+    vaisseau->vx = -vaisseau->vx/2;
+    vaisseau->vy = -vaisseau->vy/2;    
 }
 
 bool pixel_collision_detect_inbox(BITMAP *bmp1,int xl1, int yt1,BITMAP *bmp2,int xl2, int yt2,int w, int h,PALETTEPTR commonpalette)
@@ -116,7 +144,7 @@ bool pixel_collision_detect_inbox(BITMAP *bmp1,int xl1, int yt1,BITMAP *bmp2,int
 
 //
 // Implementation de la detection des collisions entre vaisseaux
-//Å@First we look for a bounding box, if none, sure, there are no collision
+//ÔøΩ@First we look for a bounding box, if none, sure, there are no collision
 //  If there is, we find the limit of the bounding box and
 //  we pixel iterate through it...
 //

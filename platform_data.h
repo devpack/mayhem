@@ -34,10 +34,12 @@ struct level_data
 	struct platform_data * platformdata;
 	int nbplatforms;
     struct dca_data alldca[NB_DCA];
+    bool use_dca;
+    bool wall_collision;
 	};
 
 void init_level_dca(struct dca_data *dca, int xsrc, int ysrc, int area, int delay);
-void init_level_data(struct level_data* leveldat, char * bmpname, char *mini_bmpname, struct platform_data *platformdata,int nbplatforms);
+void init_level_data(struct level_data* leveldat, char * bmpname, char *mini_bmpname, struct platform_data *platformdata, int nbplatforms, bool use_dca, bool wall_collision);
 int load_level(struct level_data* leveldat, int largeur, int hauteur);
 void unload_level(struct level_data* leveldat);
 #endif
