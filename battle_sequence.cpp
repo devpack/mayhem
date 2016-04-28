@@ -54,6 +54,18 @@
 	{ 492, 548, 987 },
 	{ 66, 145, 1180 },
 	{ 38, 93, 1121 } };
+    
+  struct platform_data level5[] =
+  { { 504, 568, 985 }, 
+    { 464, 513, 333 },	
+    { 428, 497, 531 },	
+    { 178, 241, 875 },
+    { 8, 37, 187 },
+	{ 302, 351, 271 },
+	{ 434, 521, 835 },
+	{ 60, 127, 1045 },
+	{ 499, 586, 1165 } };
+
 
 // init currentlevel with level
 BattleSequence::BattleSequence(GameSequence *previous,int nbviews, int nbplayers, int nblives, int level, int s_width, int s_height)
@@ -118,9 +130,12 @@ void BattleSequence::InitLevelData()
   init_level_data(&levels[2],"Mayhem_Level3_Map_256c.bmp", "Mini_map3.bmp", level3,9);
   init_level_dca(&(&levels[2])->alldca[0], 180, 555, 90, 25);
   init_level_dca(&(&levels[2])->alldca[1], 152, 1012, 90, 25);
-  init_level_data(&levels[3],"Mayhem_Level4_Map_256c.bmp", "Mini_map4.bmp", level3,9);
+  init_level_data(&levels[3],"Mayhem_Level4_Map_256c.bmp", "Mini_map4.bmp", level4,9);
   init_level_dca(&(&levels[3])->alldca[0], 180, 555, 90, 25);
   init_level_dca(&(&levels[3])->alldca[1], 152, 1012, 90, 25);
+  init_level_data(&levels[4],"Mayhem_Level5_Map_256c.bmp", "Mini_map5.bmp", level5,9);
+  init_level_dca(&(&levels[4])->alldca[0], 180, 555, 90, 25);
+  init_level_dca(&(&levels[4])->alldca[1], 152, 1012, 90, 25);
 }
 
 void BattleSequence::InitMappingAndControls()
