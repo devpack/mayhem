@@ -21,6 +21,7 @@
 	{ 434, 521, 835 },
 	{ 60, 127, 1045 },
 	{ 499, 586, 1165 } };
+  struct edge_data edgedata1 = {0, 770, 0, 1500};
 
   struct platform_data level2[] =
   {
@@ -66,7 +67,17 @@
 	{ 60, 127, 1045 },
 	{ 499, 586, 1165 } };
 
-
+  struct platform_data level6[] =
+  { { 565, 616, 459 },
+    { 14, 65, 111 },
+	{ 343, 398, 207 },
+	{ 713, 760, 231 },
+	{ 473, 540, 617 },
+	{ 316, 385, 805 },
+	{ 492, 548, 987 },
+	{ 66, 145, 1180 },
+	{ 38, 93, 1121 } };
+    
 // init currentlevel with level
 BattleSequence::BattleSequence(GameSequence *previous, int nbviews, int nbplayers, int nblives, int level, bool usedca, bool wallcollision, int s_width, int s_height)
   : GameSequence(previous),moon_physics(0.07,0.984,0.99,0.6,0.6,0.6,0.6,0.2)
@@ -122,22 +133,26 @@ BattleSequence::~BattleSequence()
 
 void BattleSequence::InitLevelData()
 {
-  init_level_data(&levels[0],"Mayhem_Level1_Map_256c.bmp", "Mini_map1.bmp", level1,10, use_dca, wall_collision);
+  init_level_data(&levels[0],"Mayhem_Level1_Map_256c.bmp", "Mini_map1.bmp", level1, 9, edgedata1, use_dca, wall_collision);
                                        // x    y  area  delay
   init_level_dca(&(&levels[0])->alldca[0], 766, 85, 150, 25);
   init_level_dca(&(&levels[0])->alldca[1], 170, 481, 90, 25);
-  init_level_data(&levels[1],"Mayhem_Level2_Map_256c.bmp", "Mini_map2.bmp", level2,8, use_dca, wall_collision);
+  init_level_data(&levels[1],"Mayhem_Level2_Map_256c.bmp", "Mini_map2.bmp", level2, 8, edgedata1, use_dca, wall_collision);
   init_level_dca(&(&levels[1])->alldca[0], 647, 273, 150, 25);
   init_level_dca(&(&levels[1])->alldca[1], 267, 947, 90, 25);
-  init_level_data(&levels[2],"Mayhem_Level3_Map_256c.bmp", "Mini_map3.bmp", level3,9, use_dca, wall_collision);
+  init_level_data(&levels[2],"Mayhem_Level3_Map_256c.bmp", "Mini_map3.bmp", level3, 9, edgedata1, use_dca, wall_collision);
   init_level_dca(&(&levels[2])->alldca[0], 180, 555, 90, 25);
   init_level_dca(&(&levels[2])->alldca[1], 152, 1012, 90, 25);
-  init_level_data(&levels[3],"Mayhem_Level4_Map_256c.bmp", "Mini_map4.bmp", level4,9, use_dca, wall_collision);
+  init_level_data(&levels[3],"Mayhem_Level4_Map_256c.bmp", "Mini_map4.bmp", level4, 9, edgedata1, use_dca, wall_collision);
   init_level_dca(&(&levels[3])->alldca[0], 180, 555, 90, 25);
   init_level_dca(&(&levels[3])->alldca[1], 152, 1012, 90, 25);
-  init_level_data(&levels[4],"Mayhem_Level5_Map_256c.bmp", "Mini_map5.bmp", level5,9, use_dca, wall_collision);
+  init_level_data(&levels[4],"Mayhem_Level5_Map_256c.bmp", "Mini_map5.bmp", level5, 9, edgedata1, use_dca, wall_collision);
   init_level_dca(&(&levels[4])->alldca[0], 180, 555, 90, 25);
   init_level_dca(&(&levels[4])->alldca[1], 152, 1012, 90, 25);
+  init_level_data(&levels[5],"Mayhem_Level6_Map_256c.bmp", "Mini_map6.bmp", level6, 9, edgedata1, use_dca, wall_collision);
+  init_level_dca(&(&levels[5])->alldca[0], 180, 555, 90, 25);
+  init_level_dca(&(&levels[5])->alldca[1], 152, 1012, 90, 25);
+
 }
 
 void BattleSequence::InitMappingAndControls()
@@ -332,8 +347,9 @@ GameSequence* BattleSequence::doRun()
         draw_debris(players, views, moon_physics, nb_players, nb_views, currentlevel->bitmap);
         gestion_minimap(vaisseaux, currentlevel, nb_players, screen_width, screen_height);
 
-        if(currentlevel==&levels[0])
-        warp_zone(vaisseaux, nb_players);
+        if(currentlevel==&levels[0]) warp_zone(vaisseaux, nb_players);
+
+        gestion_warps(vaisseaux, currentlevel, nb_players);
 
         for(i=0;i<nb_players;i++)
             display_rotate_sprite_in_all_view(&views[i],views,nb_views);

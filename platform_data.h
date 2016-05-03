@@ -22,6 +22,13 @@ struct platform_data
 	int yflat;
   };
 
+// edges of the map, where the ships will warp to the opposite edge
+struct edge_data
+    {
+    int leftx, rightx;
+    int topy, bottomy;
+    };
+
 struct level_data
 	{
 	char * bmpname;
@@ -36,10 +43,11 @@ struct level_data
     struct dca_data alldca[NB_DCA];
     bool use_dca;
     bool wall_collision;
+    struct edge_data edgedata;
 	};
 
 void init_level_dca(struct dca_data *dca, int xsrc, int ysrc, int area, int delay);
-void init_level_data(struct level_data* leveldat, char * bmpname, char *mini_bmpname, struct platform_data *platformdata, int nbplatforms, bool use_dca, bool wall_collision);
+void init_level_data(struct level_data* leveldat, char * bmpname, char *mini_bmpname, struct platform_data *platformdata, int nbplatforms, struct edge_data edgedata, bool use_dca, bool wall_collision);
 int load_level(struct level_data* leveldat, int largeur, int hauteur);
 void unload_level(struct level_data* leveldat);
 #endif

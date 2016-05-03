@@ -24,7 +24,7 @@ void init_level_dca(struct dca_data *dca, int xsrc, int ysrc, int area, int dela
 }
 
 
-void init_level_data(struct level_data* leveldat, char * bmpname,char *mini_bmpname, struct platform_data *platformdata,int nbplatforms, bool use_dca, bool wall_collision)
+void init_level_data(struct level_data* leveldat, char * bmpname, char *mini_bmpname, struct platform_data *platformdata, int nbplatforms, struct edge_data edgedata, bool use_dca, bool wall_collision)
 {
 	leveldat->bmpname=bmpname;
     leveldat->mini_bmpname=mini_bmpname;
@@ -32,6 +32,7 @@ void init_level_data(struct level_data* leveldat, char * bmpname,char *mini_bmpn
 	leveldat->platformdata=platformdata;
     leveldat->use_dca=use_dca;
     leveldat->wall_collision=wall_collision;
+    leveldat->edgedata=edgedata;
 }
 
 int load_level(struct level_data * leveldat, int largeur, int hauteur)

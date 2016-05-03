@@ -628,6 +628,23 @@ int test_place_dca_tir(struct dca_data *dca)
 //                        Gestion Warp Zone
 //----------------------------------------------------------------------------//
 
+void gestion_warps(struct vaisseau_data *v, struct level_data *currentlevel, int nbplayers)
+{
+    while(nbplayers--)
+    {
+        if(v->xpos < currentlevel->edgedata.leftx)
+        {
+            v->xpos = currentlevel->edgedata.rightx;
+            v->xposprecise = itofix(currentlevel->edgedata.rightx);
+        }
+        else if (v->xpos > currentlevel->edgedata.rightx) 
+        {
+            v->xpos = currentlevel->edgedata.leftx;
+            v->xposprecise = itofix(currentlevel->edgedata.leftx);
+        }
+        v++;
+    }
+}
 
 void warp_zone(struct vaisseau_data *v, int nbplayers)
 {
