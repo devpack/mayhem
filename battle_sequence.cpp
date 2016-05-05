@@ -21,7 +21,7 @@
 	{ 434, 521, 835 },
 	{ 60, 127, 1045 },
 	{ 499, 586, 1165 } };
-  struct edge_data edgedata1 = {0, 770, 0, 1500};
+  struct edge_data edgedata1 = {0, 792, 0, 1500};
 
   struct platform_data level2[] =
   {
@@ -68,16 +68,17 @@
 	{ 499, 586, 1165 } };
 
   struct platform_data level6[] =
-  { { 565, 616, 459 },
-    { 14, 65, 111 },
-	{ 343, 398, 207 },
-	{ 713, 760, 231 },
-	{ 473, 540, 617 },
-	{ 316, 385, 805 },
-	{ 492, 548, 987 },
-	{ 66, 145, 1180 },
-	{ 38, 93, 1121 } };
-    
+  { { 565 + 792, 616 + 792, 459 },
+    { 14 + 792, 65 + 792, 111 },
+	{ 343 + 792, 398 + 792, 207 },
+	{ 713 + 792, 760 + 792, 231 },
+	{ 473 + 792, 540 + 792, 617 },
+	{ 316 + 792, 385 + 792, 805 },
+	{ 492 + 792, 548 + 792, 987 },
+	{ 66 + 792, 145 + 792, 1180 },
+	{ 38 + 792, 93 + 792, 1121 } };
+  struct edge_data edgedata6 = {793, 1584, 0, 1500};
+  
 // init currentlevel with level
 BattleSequence::BattleSequence(GameSequence *previous, int nbviews, int nbplayers, int nblives, int level, bool usedca, bool wallcollision, int s_width, int s_height)
   : GameSequence(previous),moon_physics(0.07,0.984,0.99,0.6,0.6,0.6,0.6,0.2)
@@ -149,7 +150,7 @@ void BattleSequence::InitLevelData()
   init_level_data(&levels[4],"Mayhem_Level5_Map_256c.bmp", "Mini_map5.bmp", level5, 9, edgedata1, use_dca, wall_collision);
   init_level_dca(&(&levels[4])->alldca[0], 180, 555, 90, 25);
   init_level_dca(&(&levels[4])->alldca[1], 152, 1012, 90, 25);
-  init_level_data(&levels[5],"Mayhem_Level6_Map_256c.bmp", "Mini_map6.bmp", level6, 9, edgedata1, use_dca, wall_collision);
+  init_level_data(&levels[5],"Mayhem_Level6_Map_256c.bmp", "Mini_map6.bmp", level6, 9, edgedata6                                                                        , use_dca, wall_collision);
   init_level_dca(&(&levels[5])->alldca[0], 180, 555, 90, 25);
   init_level_dca(&(&levels[5])->alldca[1], 152, 1012, 90, 25);
 
