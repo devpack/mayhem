@@ -63,8 +63,13 @@ bool test_collision(struct player_view * pv, struct level_data *currentlevel)
 
 	BITMAP * little_screen = sprite_buffer_screen();
     // 32*32 de back_map_buffer2 ou sera blitt� le sprite -> little_screen
-    blit(pv->back_map_buffer, little_screen, pv->bordersize+pv->w/2, pv->bordersize+pv->h/2, 0, 0, 32, 32);
+    //blit(pv->back_map_buffer, little_screen, pv->bordersize+pv->w/2, pv->bordersize+pv->h/2, 0, 0, 32, 32);
+    // collision based on map rather than player view, so you can have a different view to the collision
+    blit(currentlevel->collision_bitmap, little_screen, vaisseau->xpos, vaisseau->ypos, 0, 0, 32, 32);
 
+    // debug
+    //blit(little_screen, screen, 0, 0, 0, 150, 32, 32);
+    
     int y;                                                   // loop pour toute les lignes
     int x;                                                   // loop pour ts les octet ds ligne
 	int xorig,yorig;
