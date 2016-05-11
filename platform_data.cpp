@@ -57,5 +57,6 @@ void unload_level(struct level_data * leveldat)
    if (leveldat->bitmap) destroy_bitmap(leveldat->bitmap);
    if (leveldat->mini_bitmap) destroy_bitmap(leveldat->mini_bitmap);
    if (leveldat->mini_bitmap_buffer) destroy_bitmap(leveldat->mini_bitmap_buffer);
+   if (leveldat->collision_bitmap) destroy_bitmap(leveldat->collision_bitmap);
 }
 

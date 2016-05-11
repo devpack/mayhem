@@ -1,12 +1,12 @@
-CPP  = c:\MinGW\bin\mingw32-g++.exe
-CC   = c:\MinGW\bin\mingw32-gcc.exe
+CPP  = mingw32-g++.exe
+CC   = mingw32-gcc.exe
 RES  = 
 OBJ  = battle_sequence.o collision.o command.o game_mgr.o intro_sequence.o keyboard_input.o mapping_key.o Mayhem2.o option.o physics.o platform_data.o player_info.o player_view.o soundfx.o utils.o vaisseau_data.o vaisseau_gfx.o $(RES)
 LINKOBJ  = battle_sequence.o collision.o command.o game_mgr.o intro_sequence.o keyboard_input.o mapping_key.o Mayhem2.o option.o physics.o platform_data.o player_info.o player_view.o soundfx.o utils.o vaisseau_data.o vaisseau_gfx.o $(RES)
-LIBS =  -L"C:\Users\Mart\Documents\GitHub\mayhem" -lalleg -luser32 -lgdi32 -lopengl32 -lglu32 -mwindows
+LIBS =  -L"C:\Users\Marti\Documents\GitHub\mayhem" -lalleg -luser32 -lgdi32 -lopengl32 -lglu32 -mwindows
 INCS = 
 #CXXINCS =  -I"C:\cygwin\usr\i686-pc-mingw32\sys-root\mingw\include" -I"C:\Users\scala\Desktop\Mayhem\mayhem\allegro442_include"
-CXXINCS =  -I"C:\MinGW\include" -I"C:\Users\Mart\Documents\GitHub\mayhem\allegro442_include"
+CXXINCS =  -I"D:\MinGW\include" -I"C:\Users\Marti\Documents\GitHub\mayhem\allegro442_include"
 BIN  = "Mayhem2.exe"
 CXXFLAGS = $(CXXINCS) -Werror -Wno-write-strings -Wno-deprecated-declarations
 CFLAGS = $(INCS) -Werror -Wno-write-strings -Wno-deprecated-declarations
