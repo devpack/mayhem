@@ -20,7 +20,8 @@
 	{ 302, 351, 271 },
 	{ 434, 521, 835 },
 	{ 60, 127, 1045 },
-	{ 499, 586, 1165 } };
+	{ 499, 586, 1165 },
+    { 68, 145, 1181 } };
   struct edge_data edgedata1 = {0, 792, 0, 1500};
 
   struct platform_data level2[] =
@@ -65,7 +66,10 @@
 	{ 302, 351, 271 },
 	{ 434, 521, 835 },
 	{ 60, 127, 1045 },
-	{ 499, 586, 1165 } };
+    { 348, 377, 1089 },
+	{ 499, 586, 1165 },
+    { 68, 145, 1181 } };
+  struct edge_data edgedata5 = {5, 750, 0, 1500};
 
   struct platform_data level6[] =
   { { 565, 616, 459 },
@@ -134,25 +138,30 @@ BattleSequence::~BattleSequence()
 
 void BattleSequence::InitLevelData()
 {
-  init_level_data(&levels[0],"Mayhem_Level1_Map_256c.bmp", "Mini_map1.bmp", "Mayhem_Level1_Map_256c.bmp", level1, 9, edgedata1, use_dca, wall_collision);
+  init_level_data(&levels[0],"Mayhem_Level1_Map_256c.bmp", "Mini_map1.bmp", "Mayhem_Level1_Map_256c.bmp", level1, 10, edgedata1, use_dca, wall_collision);
                                        // x    y  area  delay
   init_level_dca(&(&levels[0])->alldca[0], 766, 85, 150, 25);
   init_level_dca(&(&levels[0])->alldca[1], 170, 481, 90, 25);
+  
   init_level_data(&levels[1],"Mayhem_Level2_Map_256c.bmp", "Mini_map2.bmp", "Mayhem_Level2_Map_256c.bmp", level2, 8, edgedata1, use_dca, wall_collision);
   init_level_dca(&(&levels[1])->alldca[0], 647, 273, 150, 25);
   init_level_dca(&(&levels[1])->alldca[1], 267, 947, 90, 25);
+  
   init_level_data(&levels[2],"Mayhem_Level3_Map_256c.bmp", "Mini_map3.bmp", "Mayhem_Level3_Map_256c.bmp", level3, 9, edgedata1, use_dca, wall_collision);
   init_level_dca(&(&levels[2])->alldca[0], 180, 555, 90, 25);
   init_level_dca(&(&levels[2])->alldca[1], 152, 1012, 90, 25);
+  
   init_level_data(&levels[3],"Mayhem_Level4_Map_256c.bmp", "Mini_map4.bmp", "Mayhem_Level4_Map_256c.bmp", level4, 9, edgedata1, use_dca, wall_collision);
-  init_level_dca(&(&levels[3])->alldca[0], 180, 555, 90, 25);
-  init_level_dca(&(&levels[3])->alldca[1], 152, 1012, 90, 25);
-  init_level_data(&levels[4],"Mayhem_Level5_Map_256c.bmp", "Mini_map5.bmp", "Mayhem_Level5_Map_256c.bmp", level5, 9, edgedata1, use_dca, wall_collision);
-  init_level_dca(&(&levels[4])->alldca[0], 180, 555, 90, 25);
-  init_level_dca(&(&levels[4])->alldca[1], 152, 1012, 90, 25);
+  init_level_dca(&(&levels[3])->alldca[0], 651, 747, 90, 25);
+  init_level_dca(&(&levels[3])->alldca[1], 29, 575, 150, 25);
+  
+  init_level_data(&levels[4],"Mayhem_Level5_Map_256c.bmp", "Mini_map5.bmp", "Mayhem_Level5_Map_256c.bmp", level5, 10, edgedata5, use_dca, wall_collision);
+  init_level_dca(&(&levels[4])->alldca[0], 151, 632, 90, 25);
+  init_level_dca(&(&levels[4])->alldca[1], 756, 709, 150, 25);
+  
   init_level_data(&levels[5],"Mayhem_Level6_Map_256c.bmp", "Mini_map6.bmp", "Mayhem_Level6_Collision.bmp", level6, 9, edgedata6, use_dca, wall_collision);
-  init_level_dca(&(&levels[5])->alldca[0], 180, 555, 90, 25);
-  init_level_dca(&(&levels[5])->alldca[1], 152, 1012, 90, 25);
+  init_level_dca(&(&levels[5])->alldca[0], 58, 429, 150, 25);
+  init_level_dca(&(&levels[5])->alldca[1], 361, 347, 90, 25);
 
 }
 

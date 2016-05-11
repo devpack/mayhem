@@ -41,9 +41,9 @@ public:
 	inline static void start() { timing_counter = 0; };
 	inline static void reset() { timing_counter = -1; };
 	static void irq() { if (timing_counter>=0) ++timing_counter;	};
-	static bool wasTriggered() { if (timing_counter>0) { timing_counter--; return true; } return false; };
+	//static bool wasTriggered() { if (timing_counter>0) { timing_counter--; return true; } return false; };
     //Something wierd is going on here... Under windows 10 you dont get 40 fps, and with the above code you end up with a LOT more..  Something isn't pegging the interupt properly.
-    //static bool wasTriggered() { if (timing_counter>0) { timing_counter=0; return true; } return false; };
+    static bool wasTriggered() { if (timing_counter>0) { timing_counter=0; return true; } return false; };
 };
 
 
