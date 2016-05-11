@@ -39,5 +39,6 @@ int test_place_dca_tir(struct dca_data *dca);
 void gestion_dca(struct dca_data *dca, struct vaisseau_data *v,  struct player_view *views, int nbviews, BITMAP *src_map);
 
 void warp_zone(struct vaisseau_data *v, int nbplayers);
+void gestion_warps(struct vaisseau_data *v, struct level_data *currentlevel, int nbplayers);
 
 #endif

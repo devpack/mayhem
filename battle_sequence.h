@@ -28,14 +28,14 @@
 #define NB_MAX_VAISSEAU 4
 #define NB_MAX_PLAYERS (NB_MAX_VAISSEAU)
 #define NB_MAX_TYPE_VAISSEAU 4
-#define NB_LEVELS 3
+#define NB_LEVELS 6
 
 #define NB_OPTIONS 1
 
 class BattleSequence : public GameSequence
 {
 public:
-       BattleSequence(GameSequence *previous,int nbviews, int nbplayers, int level, int s_width, int s_height);
+       BattleSequence(GameSequence *previous,int nbviews, int nbplayers, int nblives, int level, bool usedca, bool wall_collision, int s_width, int s_height);
        ~BattleSequence();
 private:
        void InitLevelData();
@@ -44,6 +44,7 @@ private:
        void InitPlayerInfo();
        void InitPlayerViews();
        void InitSoundFx();
+       bool Gameover();
 private:
        GameSequence* doRun();
 
@@ -57,6 +58,9 @@ private:
 
         int    nb_views;
         int    nb_players;
+        int    nb_lives;
+        bool use_dca;
+        bool wall_collision;
         struct vaisseau_data vaisseaux[NB_MAX_VAISSEAU];
         struct mapping_key keyvaisseau[NB_MAX_VAISSEAU];
         struct command commands[NB_MAX_VAISSEAU];

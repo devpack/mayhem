@@ -21,6 +21,7 @@ void GameManager::Init()
   // GP TODO? THROW EXCEPTION?
   install_sound(DIGI_AUTODETECT , MIDI_AUTODETECT , NULL);
   set_gfx_mode( GFXOPENARG, DEFAULT_WIDTH, DEFAULT_HEIGHT, 0, 0 );          // test ecran
+  //set_gfx_mode( GFX_AUTODETECT_WINDOWED, DEFAULT_WIDTH, DEFAULT_HEIGHT, 0, 0 );          // windowed
 }
 
 void GameManager::Shutdown()

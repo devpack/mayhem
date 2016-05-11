@@ -14,4 +14,5 @@ bool collision_backtir_ship(struct vaisseau_data * v,struct vaisseau_data *allv,
 bool collision_debris_ship(struct vaisseau_data * v,struct vaisseau_data *allv, int nombre_vaisseau);
 bool collision_dca_ship(struct vaisseau_data * v,struct dca_data *alldca, int nb_dca);
 
+void bounce_vaisseau(struct vaisseau_data *vaisseau);
 #endif
